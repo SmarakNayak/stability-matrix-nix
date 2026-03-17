@@ -1,0 +1,45 @@
+name: Update StabilityMatrix
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@v14
+
+      - name: Run update script
+        id: update
+        run: ./scripts/update-version.sh
+
+      - name: Create PR
+        if: steps.update.outputs.updated == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          version="${{ steps.update.outputs.version }}"
+          branch="update/stability-matrix-${version}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add package.nix
+          git commit -m "update: stability-matrix $version"
+          git push origin "$branch"
+
+          gh pr create \
+            --title "update: stability-matrix ${version}" \
+            --body "Automated update to StabilityMatrix v${version}." \
+            --base main \
+            --head "$branch"
+
+          gh pr merge "$branch" --auto --squash
