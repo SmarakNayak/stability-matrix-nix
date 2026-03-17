@@ -50,7 +50,7 @@ nix build
 
 ### Portable Mode
 
-Portable Mode is not supported. It requires a writable `Data` folder next to the executable, but `/nix/store` is read-only. When prompted to choose a data location on first launch, select a path you have write access to (e.g. `~/.local/share/StabilityMatrix`).
+Portable Mode is not supported. It requires a writable `Data` folder next to the executable, but `/nix/store` is read-only. When prompted to choose a data location on first launch, select a path you have write access to. The default `~/StabilityMatrix` works fine.
 
 ## AppImage wrapper
 
