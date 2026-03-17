@@ -46,6 +46,12 @@ nix build
 ./result/bin/stability-matrix
 ```
 
+## Notes
+
+### Portable Mode
+
+Portable Mode is not supported. It requires a writable `Data` folder next to the executable, but `/nix/store` is read-only. When prompted to choose a data location on first launch, select a path you have write access to (e.g. `~/.local/share/StabilityMatrix`).
+
 ## AppImage wrapper
 
 This package wraps the official StabilityMatrix Linux AppImage using `appimageTools.wrapType2`. Note: the `appimageTools` API is marked unstable in nixpkgs and may change in future releases.
