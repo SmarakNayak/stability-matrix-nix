@@ -10,27 +10,55 @@ permissions:
   pull-requests: write
 
 jobs:
+  check-update:
+    runs-on: ubuntu-latest
+    outputs:
+      has_update: ${{ steps.check.outputs.has_update }}
+      new_version: ${{ steps.check.outputs.new_version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for updates
+        id: check
+        run: |
+          current=$(grep 'version = "' package.nix | head -1 | sed 's/.*version = "\(.*\)".*/\1/')
+          latest=$(curl -sf https://api.github.com/repos/LykosAI/StabilityMatrix/releases/latest \
+            | grep '"tag_name"' | sed 's/.*"v\(.*\)".*/\1/')
+          echo "Current: $current"
+          echo "Latest:  $latest"
+          if [ "$current" != "$latest" ]; then
+            echo "has_update=true" >> "$GITHUB_OUTPUT"
+            echo "new_version=$latest" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_update=false" >> "$GITHUB_OUTPUT"
+          fi
+
   update:
+    needs: check-update
+    if: needs.check-update.outputs.has_update == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - uses: DeterminateSystems/nix-installer-action@v14
 
-      - name: Run update script
-        id: update
+      - name: Update version and hash
         run: ./scripts/update-version.sh
 
+      - name: Build and test
+        run: |
+          nix build
+          test -x ./result/bin/stability-matrix
+
       - name: Create PR
-        if: steps.update.outputs.updated == 'true'
         id: create-pr
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "update: stability-matrix ${{ steps.update.outputs.version }}"
-          title: "update: stability-matrix ${{ steps.update.outputs.version }}"
-          body: "Automated update to StabilityMatrix v${{ steps.update.outputs.version }}."
-          branch: "update/stability-matrix-${{ steps.update.outputs.version }}"
+          commit-message: "update: stability-matrix ${{ needs.check-update.outputs.new_version }}"
+          title: "update: stability-matrix ${{ needs.check-update.outputs.new_version }}"
+          body: "Automated update to StabilityMatrix v${{ needs.check-update.outputs.new_version }}."
+          branch: "update/stability-matrix-${{ needs.check-update.outputs.new_version }}"
           delete-branch: true
 
       - name: Enable auto-merge
