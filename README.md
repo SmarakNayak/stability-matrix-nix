@@ -1,6 +1,6 @@
 # stability-matrix-nix
 
-Nix package for [StabilityMatrix](https://github.com/LykosAI/StabilityMatrix), a multi-platform package manager for Stable Diffusion.
+Nix package for the [StabilityMatrix](https://github.com/LykosAI/StabilityMatrix) AppImage, a multi-platform package manager for Stable Diffusion.
 
 ## Usage
 
