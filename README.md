@@ -20,6 +20,19 @@ environment.systemPackages = [
 ];
 ```
 
+### Via overlay
+
+If you prefer to add `stability-matrix` to your nixpkgs instead of referencing the flake directly:
+
+```nix
+# flake.nix
+inputs.stability-matrix-nix.url = "github:SmarakNayak/stability-matrix-nix";
+
+# NixOS config
+nixpkgs.overlays = [ inputs.stability-matrix-nix.overlays.default ];
+environment.systemPackages = [ pkgs.stability-matrix ];
+```
+
 ### One-off
 
 ```bash
