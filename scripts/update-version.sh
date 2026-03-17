@@ -43,5 +43,7 @@ echo "Hash: $HASH"
 sed -i "s|version = \"${CURRENT}\"|version = \"${LATEST}\"|" "$PACKAGE_NIX"
 sed -i "s|hash = \"sha256-.*\"|hash = \"${HASH}\"|" "$PACKAGE_NIX"
 
+nix flake update
+
 echo "updated=true" >> "${GITHUB_OUTPUT:-/dev/null}"
 echo "version=$LATEST" >> "${GITHUB_OUTPUT:-/dev/null}"
