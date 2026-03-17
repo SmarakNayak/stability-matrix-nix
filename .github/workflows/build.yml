@@ -8,6 +8,9 @@ on:
       - package.nix
       - flake.nix
       - flake.lock
+  workflow_run:
+    workflows: ["Update StabilityMatrix"]
+    types: [completed]
 
 jobs:
   build:
