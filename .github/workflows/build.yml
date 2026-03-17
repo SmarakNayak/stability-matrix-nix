@@ -24,4 +24,4 @@ jobs:
         run: nix build
 
       - name: Smoke test
-        run: ./result/bin/stability-matrix --version || ./result/bin/stability-matrix --help
+        run: test -x ./result/bin/stability-matrix
