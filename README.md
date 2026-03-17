@@ -35,14 +35,7 @@ nix build
 
 ## AppImage wrapper
 
-This package wraps the official StabilityMatrix Linux AppImage using `appimageTools.wrapType2`. The AppImage is sandboxed via [bubblewrap](https://github.com/containers/bubblewrap), which requires Linux user namespaces. Most systems support this out of the box, but some hardened kernels disable it — if the app fails to launch with a `bwrap` permission error, you may need to enable user namespaces:
-
-```bash
-# Check current setting (1 = enabled)
-sysctl kernel.unprivileged_userns_clone
-```
-
-Note: the `appimageTools` API is marked unstable in nixpkgs and may change in future releases.
+This package wraps the official StabilityMatrix Linux AppImage using `appimageTools.wrapType2`. Note: the `appimageTools` API is marked unstable in nixpkgs and may change in future releases.
 
 ## Supported systems
 
