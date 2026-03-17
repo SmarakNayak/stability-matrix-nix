@@ -33,6 +33,10 @@ nix build
 ./result/bin/stability-matrix
 ```
 
+## Supported systems
+
+Currently only `x86_64-linux` is supported, as StabilityMatrix only ships a Linux x64 binary. Support for additional systems (e.g. `aarch64-linux`) will be added if upstream provides builds for them.
+
 ## Updates
 
 Version updates are automated via GitHub Actions — the update workflow runs hourly, bumps the version and hash in `package.nix`, updates `flake.lock`, builds to verify, and opens a PR that auto-merges on success.
