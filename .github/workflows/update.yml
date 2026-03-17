@@ -29,12 +29,18 @@ jobs:
           version="${{ steps.update.outputs.version }}"
           branch="update/stability-matrix-${version}"
 
+          # Skip if PR already exists for this version
+          if gh pr list --head "$branch" --json number --jq '.[0].number' | grep -q .; then
+            echo "PR already exists for $branch, skipping."
+            exit 0
+          fi
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
           git add package.nix
           git commit -m "update: stability-matrix $version"
-          git push origin "$branch"
+          git push origin "$branch" --force
 
           gh pr create \
             --title "update: stability-matrix ${version}" \
