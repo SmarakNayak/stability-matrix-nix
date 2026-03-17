@@ -16,8 +16,8 @@ latest_version() {
 fetch_hash() {
   local version="$1"
   local url="https://github.com/LykosAI/StabilityMatrix/releases/download/v${version}/StabilityMatrix-linux-x64.zip"
-  nix hash convert --hash-algo sha256 \
-    "$(nix-prefetch-url --unpack "$url" 2>/dev/null)"
+  nix store prefetch-file --hash-algo sha256 --unpack --json "$url" 2>/dev/null \
+    | grep -o '"hash":"[^"]*"' | sed 's/"hash":"\(.*\)"/\1/'
 }
 
 CURRENT=$(current_version)
