@@ -14,6 +14,7 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraPkgs = pkgs: [
+    pkgs.git
     pkgs.icu          # StabilityMatrix: Couldn't find a valid ICU package installed on the system
     pkgs.libxcrypt-legacy # comfyui: libcrypt.so.1: cannot open shared object file: No such file or directory
     pkgs.uv           # forge-neo: /bin/sh: uv: command not found
@@ -23,6 +24,7 @@ appimageTools.wrapType2 {
     pkgs.libxcb.dev   # reForge: fatal error: xcb/xcb.h: No such file or directory
     pkgs.libX11.dev   # reForge: fatal error: X11/Xlib.h: No such file or directory
     pkgs.xorgproto    # reForge: fatal error: X11/X.h: No such file or directory
+    pkgs.zstd         # comfyui: libzstd.so.1: cannot open shared object file: No such file or directory
   ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,7 +33,13 @@ appimageTools.wrapType2 {
     wrapProgram $out/bin/${pname} \
       --set APPIMAGE $out/bin/${pname}
   '';
-
+  # Note some apps within StabilityMatrix require distutils in stdlib,
+  # while others require distutils from setuptools.
+  # So not setting the env variable here. But leaving it for reference
+  # --set SETUPTOOLS_USE_DISTUTILS stdlib # this may fix the following error:
+  # '''setuptools vendored distutils conflicts with bundled cpython-3.10.19'''
+  # as it tells setuptools to not override stdlib's distutils with its own
+  
   meta = {
     description = "Multi-platform package manager for Stable Diffusion";
     homepage = "https://github.com/LykosAI/StabilityMatrix";
