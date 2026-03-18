@@ -1,4 +1,4 @@
-{ lib, appimageTools, fetchzip, icu, libxcrypt-legacy, uv, makeWrapper }:
+{ lib, appimageTools, fetchzip, makeWrapper }:
 
 let
   pname = "stability-matrix";
@@ -14,9 +14,15 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraPkgs = pkgs: [
-    icu
-    libxcrypt-legacy
-    uv
+    pkgs.icu          # StabilityMatrix: Couldn't find a valid ICU package installed on the system
+    pkgs.libxcrypt-legacy # comfyui: libcrypt.so.1: cannot open shared object file: No such file or directory
+    pkgs.uv           # forge-neo: /bin/sh: uv: command not found
+    pkgs.pkg-config   # reForge: Did not find pkg-config by name 'pkg-config'
+    pkgs.gcc          # reForge: Unknown compiler(s): [['cc'], ['gcc'], ...]
+    pkgs.cairo.dev    # reForge: Dependency "cairo" not found, tried pkgconfig
+    pkgs.libxcb.dev   # reForge: fatal error: xcb/xcb.h: No such file or directory
+    pkgs.libX11.dev   # reForge: fatal error: X11/Xlib.h: No such file or directory
+    pkgs.xorgproto    # reForge: fatal error: X11/X.h: No such file or directory
   ];
 
   nativeBuildInputs = [ makeWrapper ];
