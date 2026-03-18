@@ -19,6 +19,7 @@ appimageTools.wrapType2 {
     pkgs.libxcrypt-legacy # comfyui: libcrypt.so.1: cannot open shared object file: No such file or directory
     pkgs.uv           # forge-neo: /bin/sh: uv: command not found
     pkgs.pkg-config   # reForge: Did not find pkg-config by name 'pkg-config'
+    pkgs.cmake        # reForge: cmake not found
     pkgs.gcc          # reForge: Unknown compiler(s): [['cc'], ['gcc'], ...]
     pkgs.cairo.dev    # reForge: Dependency "cairo" not found, tried pkgconfig
     pkgs.libxcb.dev   # reForge: fatal error: xcb/xcb.h: No such file or directory
@@ -39,6 +40,7 @@ appimageTools.wrapType2 {
   # --set SETUPTOOLS_USE_DISTUTILS stdlib # this may fix the following error:
   # '''setuptools vendored distutils conflicts with bundled cpython-3.10.19'''
   # as it tells setuptools to not override stdlib's distutils with its own
+  # But this will break any python >3.12 as stdlib no longer has distutils
   
   meta = {
     description = "Multi-platform package manager for Stable Diffusion";
