@@ -1,4 +1,4 @@
-{ lib, appimageTools, fetchzip, makeWrapper }:
+{ lib, appimageTools, fetchzip, makeWrapper, cacert }:
 
 let
   pname = "stability-matrix";
@@ -14,6 +14,7 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraPkgs = pkgs: [
+    pkgs.cacert        # comfyui: SSL certificate verification failed
     pkgs.git
     pkgs.icu          # StabilityMatrix: Couldn't find a valid ICU package installed on the system
     pkgs.libxcrypt-legacy # comfyui: libcrypt.so.1: cannot open shared object file: No such file or directory
@@ -32,7 +33,9 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     wrapProgram $out/bin/${pname} \
-      --set APPIMAGE $out/bin/${pname}
+      --set APPIMAGE $out/bin/${pname} \
+      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
+      --set NIX_SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
   '';
   # Note some apps within StabilityMatrix require distutils in stdlib,
   # while others require distutils from setuptools.
