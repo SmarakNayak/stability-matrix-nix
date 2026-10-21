@@ -2,11 +2,11 @@
 
 let
   pname = "stability-matrix";
-  version = "2.16.4";
+  version = "2.16.5";
 
   src = (fetchzip {
     url = "https://github.com/LykosAI/StabilityMatrix/releases/download/v${version}/StabilityMatrix-linux-x64.zip";
-    hash = "sha256-0w0u6cn1FJIbzDUCUjoxHlMma3fNe6dHzEaOxFsNXg4=";
+    hash = "sha256-MO/3yFoejhjFsfx+j62QNGDRjhQ2kdfUpuy7eh/PzFE=";
     stripRoot = false;
   }) + "/StabilityMatrix.AppImage";
 in
